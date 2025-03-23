@@ -1,0 +1,64 @@
+<div class="task-detail-container">
+  <button mat-icon-button class="back-button" (click)="backToList()" matTooltip="Back to Tasks">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading task details...</p>
+  </div>
+
+  <div class="error-container" *ngIf="error">
+    <mat-icon color="warn">error_outline</mat-icon>
+    <h2>Task not found</h2>
+    <p>The task you're looking for doesn't exist or has been deleted.</p>
+    <button mat-raised-button color="primary" (click)="backToList()">Back to Task List</button>
+  </div>
+
+  <mat-card class="task-detail-card mat-elevation-z3" *ngIf="!loading && !error && task">
+    <mat-card-header>
+      <div mat-card-avatar [ngClass]="getStatusClass(task.status)" class="status-avatar">
+        <mat-icon>{{task.status === 'Completed' ? 'check_circle' : (task.status === 'InProgress' ? 'hourglass_top' : 'assignment')}}</mat-icon>
+      </div>
+      <mat-card-title>{{task.title}}</mat-card-title>
+      <mat-card-subtitle>
+        <span class="status-badge" [ngClass]="getStatusClass(task.status)">{{task.status}}</span>
+        <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{task.priority}}</span>
+        <span class="category-badge">{{task.category}}</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="task-metadata">
+        <div class="metadata-item">
+          <span class="label">Created:</span>
+          <span class="value">{{formatDate(task.createdAt)}}</span>
+        </div>
+        <div class="metadata-item" *ngIf="task.updatedAt">
+          <span class="label">Last Updated:</span>
+          <span class="value">{{formatDate(task.updatedAt)}}</span>
+        </div>
+        <div class="metadata-item">
+          <span class="label">Due Date:</span>
+          <span class="value">{{formatDate(task.dueDate)}}</span>
+        </div>
+      </div>
+
+      <div class="task-description">
+        <h3>Description</h3>
+        <p>{{task.description || 'No description provided.'}}</p>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-stroked-button color="primary" (click)="editTask()">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+      <button mat-stroked-button color="warn" (click)="deleteTask()">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

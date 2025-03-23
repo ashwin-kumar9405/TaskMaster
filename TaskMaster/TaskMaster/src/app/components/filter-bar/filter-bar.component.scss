@@ -1,0 +1,46 @@
+.filter-bar {
+  background-color: var(--background-color);
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.search-container {
+  width: 100%;
+  margin-bottom: 16px;
+  
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+  
+  mat-form-field {
+    flex-grow: 1;
+    flex-basis: 200px;
+  }
+  
+  button {
+    margin-top: 8px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 600px) {
+  .filter-controls {
+    flex-direction: column;
+    
+    mat-form-field {
+      width: 100%;
+    }
+    
+    button {
+      width: 100%;
+    }
+  }
+}

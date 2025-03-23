@@ -1,0 +1,97 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <button mat-raised-button color="primary" (click)="addNewTask()">
+      <mat-icon>add</mat-icon>
+      New Task
+    </button>
+  </div>
+
+  <div class="status-summary">
+    <div class="summary-card" *ngFor="let statusItem of (tasksByStatus$ | async)">
+      <mat-card class="mat-elevation-z3" (click)="navigateToTasks(statusItem.status)">
+        <mat-card-content>
+          <div class="status-value">{{ statusItem.count }}</div>
+          <div class="status-label">{{ statusItem.status }}</div>
+          <div class="status-indicator" [style.background-color]="statusItem.color"></div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <button mat-stroked-button color="primary" (click)="navigateToTasks()">
+      <mat-icon>list</mat-icon>
+      View All Tasks
+    </button>
+    <button mat-stroked-button color="accent" (click)="navigateToKanban()">
+      <mat-icon>view_column</mat-icon>
+      Go to Kanban Board
+    </button>
+  </div>
+
+  <div class="tasks-overview">
+    <div class="tasks-column">
+      <h2>
+        <mat-icon [style.color]="statusColors.Todo">assignment</mat-icon>
+        To-Do Tasks
+      </h2>
+      <div class="task-list">
+        <mat-card class="task-card mat-elevation-z2" *ngFor="let task of (todoTasks$ | async)?.slice(0, 3)" [routerLink]="['/tasks', task.id]">
+          <mat-card-content>
+            <div class="task-title">{{ task.title }}</div>
+            <div class="task-meta">
+              <span class="priority-badge" [class]="'priority-' + task.priority.toLowerCase()">{{ task.priority }}</span>
+              <span class="category-badge">{{ task.category }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <div class="empty-state" *ngIf="(todoTasks$ | async)?.length === 0">
+          <p>No to-do tasks yet.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks-column">
+      <h2>
+        <mat-icon [style.color]="statusColors.InProgress">hourglass_top</mat-icon>
+        In Progress
+      </h2>
+      <div class="task-list">
+        <mat-card class="task-card mat-elevation-z2" *ngFor="let task of (inProgressTasks$ | async)?.slice(0, 3)" [routerLink]="['/tasks', task.id]">
+          <mat-card-content>
+            <div class="task-title">{{ task.title }}</div>
+            <div class="task-meta">
+              <span class="priority-badge" [class]="'priority-' + task.priority.toLowerCase()">{{ task.priority }}</span>
+              <span class="category-badge">{{ task.category }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <div class="empty-state" *ngIf="(inProgressTasks$ | async)?.length === 0">
+          <p>No tasks in progress.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks-column">
+      <h2>
+        <mat-icon [style.color]="statusColors.Completed">check_circle</mat-icon>
+        Recently Completed
+      </h2>
+      <div class="task-list">
+        <mat-card class="task-card mat-elevation-z2" *ngFor="let task of (completedTasks$ | async)?.slice(0, 3)" [routerLink]="['/tasks', task.id]">
+          <mat-card-content>
+            <div class="task-title">{{ task.title }}</div>
+            <div class="task-meta">
+              <span class="priority-badge" [class]="'priority-' + task.priority.toLowerCase()">{{ task.priority }}</span>
+              <span class="category-badge">{{ task.category }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <div class="empty-state" *ngIf="(completedTasks$ | async)?.length === 0">
+          <p>No completed tasks yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

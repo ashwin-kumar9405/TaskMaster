@@ -1,0 +1,101 @@
+<div class="task-form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? 'Edit Task' : 'Create New Task' }}</h1>
+    <button mat-icon-button (click)="cancel()" matTooltip="Cancel">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading task data...</p>
+  </div>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <mat-card class="form-card mat-elevation-z2">
+      <mat-card-content>
+        <!-- Title Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Task Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter task title" required>
+          <mat-error *ngIf="taskForm.get('title')?.hasError('required')">
+            Title is required
+          </mat-error>
+          <mat-error *ngIf="taskForm.get('title')?.hasError('maxlength')">
+            Title cannot exceed 100 characters
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Description Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" placeholder="Enter task description" rows="4"></textarea>
+          <mat-error *ngIf="taskForm.get('description')?.hasError('maxlength')">
+            Description cannot exceed 500 characters
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-row">
+          <!-- Due Date Field -->
+          <mat-form-field appearance="outline">
+            <mat-label>Due Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dueDate" placeholder="Choose a date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Priority Field -->
+          <mat-form-field appearance="outline">
+            <mat-label>Priority</mat-label>
+            <mat-select formControlName="priority" required>
+              <mat-option *ngFor="let priority of priorities" [value]="priority">
+                {{ priority }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="taskForm.get('priority')?.hasError('required')">
+              Priority is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <!-- Category Field -->
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category" required>
+              <mat-option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="taskForm.get('category')?.hasError('required')">
+              Category is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Status Field -->
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status" required>
+              <mat-option *ngFor="let status of statuses" [value]="status">
+                {{ status === 'InProgress' ? 'In Progress' : status }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="taskForm.get('status')?.hasError('required')">
+              Status is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-stroked-button type="button" (click)="cancel()">
+          Cancel
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="taskForm.invalid || submitting">
+          <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+          {{ isEditMode ? 'Update Task' : 'Create Task' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

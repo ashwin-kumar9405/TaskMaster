@@ -1,0 +1,182 @@
+<div class="kanban-container">
+  <div class="kanban-header">
+    <h1>Kanban Board</h1>
+    <button mat-raised-button color="primary" (click)="addNewTask()">
+      <mat-icon>add</mat-icon>
+      New Task
+    </button>
+  </div>
+
+  <div class="kanban-board">
+    <!-- To Do Column -->
+    <div class="kanban-column">
+      <div class="column-header todo-header">
+        <h2>To Do</h2>
+        <span class="task-count">{{ (todoTasks$ | async)?.length || 0 }}</span>
+      </div>
+      
+      <div class="column-content">
+        <div
+          cdkDropList
+          #todoList="cdkDropList"
+          id="todo-list"
+          [cdkDropListData]="todoTasks$ | async"
+          [cdkDropListConnectedTo]="['in-progress-list', 'completed-list']"
+          (cdkDropListDropped)="onTaskDrop($event)"
+          class="task-list">
+          
+          <div
+            class="task-card"
+            *ngFor="let task of todoTasks$ | async"
+            cdkDrag
+            [cdkDragData]="task"
+            (click)="viewTask(task)">
+            
+            <div class="task-card-content">
+              <div class="task-title">{{ task.title }}</div>
+              <div class="task-description">{{ task.description | slice:0:50 }}{{ task.description.length > 50 ? '...' : '' }}</div>
+              
+              <div class="task-meta">
+                <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
+                <span class="category-badge">{{ task.category }}</span>
+                <span class="due-date" *ngIf="task.dueDate">{{ formatDueDate(task.dueDate) }}</span>
+              </div>
+            </div>
+            
+            <div class="task-actions">
+              <button mat-icon-button color="primary" matTooltip="Edit" (click)="editTask($event, task)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" matTooltip="Delete" (click)="deleteTask($event, task)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <!-- Drag Preview -->
+            <div class="custom-drag-preview" *cdkDragPreview>
+              <div>{{ task.title }}</div>
+            </div>
+          </div>
+
+          <div class="empty-list" *ngIf="(todoTasks$ | async)?.length === 0">
+            <p>No tasks to do</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- In Progress Column -->
+    <div class="kanban-column">
+      <div class="column-header in-progress-header">
+        <h2>In Progress</h2>
+        <span class="task-count">{{ (inProgressTasks$ | async)?.length || 0 }}</span>
+      </div>
+      
+      <div class="column-content">
+        <div
+          cdkDropList
+          #inProgressList="cdkDropList"
+          id="in-progress-list"
+          [cdkDropListData]="inProgressTasks$ | async"
+          [cdkDropListConnectedTo]="['todo-list', 'completed-list']"
+          (cdkDropListDropped)="onTaskDrop($event)"
+          class="task-list">
+          
+          <div
+            class="task-card"
+            *ngFor="let task of inProgressTasks$ | async"
+            cdkDrag
+            [cdkDragData]="task"
+            (click)="viewTask(task)">
+            
+            <div class="task-card-content">
+              <div class="task-title">{{ task.title }}</div>
+              <div class="task-description">{{ task.description | slice:0:50 }}{{ task.description.length > 50 ? '...' : '' }}</div>
+              
+              <div class="task-meta">
+                <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
+                <span class="category-badge">{{ task.category }}</span>
+                <span class="due-date" *ngIf="task.dueDate">{{ formatDueDate(task.dueDate) }}</span>
+              </div>
+            </div>
+            
+            <div class="task-actions">
+              <button mat-icon-button color="primary" matTooltip="Edit" (click)="editTask($event, task)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" matTooltip="Delete" (click)="deleteTask($event, task)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <!-- Drag Preview -->
+            <div class="custom-drag-preview" *cdkDragPreview>
+              <div>{{ task.title }}</div>
+            </div>
+          </div>
+
+          <div class="empty-list" *ngIf="(inProgressTasks$ | async)?.length === 0">
+            <p>No tasks in progress</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completed Column -->
+    <div class="kanban-column">
+      <div class="column-header completed-header">
+        <h2>Completed</h2>
+        <span class="task-count">{{ (completedTasks$ | async)?.length || 0 }}</span>
+      </div>
+      
+      <div class="column-content">
+        <div
+          cdkDropList
+          #completedList="cdkDropList"
+          id="completed-list"
+          [cdkDropListData]="completedTasks$ | async"
+          [cdkDropListConnectedTo]="['todo-list', 'in-progress-list']"
+          (cdkDropListDropped)="onTaskDrop($event)"
+          class="task-list">
+          
+          <div
+            class="task-card"
+            *ngFor="let task of completedTasks$ | async"
+            cdkDrag
+            [cdkDragData]="task"
+            (click)="viewTask(task)">
+            
+            <div class="task-card-content">
+              <div class="task-title">{{ task.title }}</div>
+              <div class="task-description">{{ task.description | slice:0:50 }}{{ task.description.length > 50 ? '...' : '' }}</div>
+              
+              <div class="task-meta">
+                <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
+                <span class="category-badge">{{ task.category }}</span>
+                <span class="due-date" *ngIf="task.dueDate">{{ formatDueDate(task.dueDate) }}</span>
+              </div>
+            </div>
+            
+            <div class="task-actions">
+              <button mat-icon-button color="primary" matTooltip="Edit" (click)="editTask($event, task)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" matTooltip="Delete" (click)="deleteTask($event, task)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <!-- Drag Preview -->
+            <div class="custom-drag-preview" *cdkDragPreview>
+              <div>{{ task.title }}</div>
+            </div>
+          </div>
+
+          <div class="empty-list" *ngIf="(completedTasks$ | async)?.length === 0">
+            <p>No completed tasks</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

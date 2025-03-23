@@ -1,0 +1,151 @@
+.task-detail-container {
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+}
+
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  background-color: var(--background-color);
+  border-radius: 4px;
+  margin-top: 32px;
+  
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+  
+  h2 {
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+  
+  p {
+    margin-bottom: 24px;
+    color: var(--text-secondary);
+  }
+}
+
+.task-detail-card {
+  margin-top: 32px;
+  
+  mat-card-header {
+    margin-bottom: 16px;
+    
+    .status-avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+.status-badge, .priority-badge, .category-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+.status-todo {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-progress {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.status-completed {
+  background-color: #e8f5e9;
+  color: #43a047;
+}
+
+.priority-high {
+  background-color: #ffebee;
+  color: #e53935;
+}
+
+.priority-medium {
+  background-color: #fff8e1;
+  color: #ffa000;
+}
+
+.priority-low {
+  background-color: #e8f5e9;
+  color: #43a047;
+}
+
+.category-badge {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: var(--text-primary);
+}
+
+.task-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  
+  .metadata-item {
+    flex: 1 0 50%;
+    margin-bottom: 12px;
+    
+    .label {
+      font-weight: 500;
+      margin-right: 8px;
+      color: var(--text-secondary);
+    }
+    
+    .value {
+      color: var(--text-primary);
+    }
+  }
+}
+
+.task-description {
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+  
+  p {
+    white-space: pre-line;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+}
+
+@media (max-width: 600px) {
+  .task-metadata {
+    .metadata-item {
+      flex: 1 0 100%;
+    }
+  }
+}
